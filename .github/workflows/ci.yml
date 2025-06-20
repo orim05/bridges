@@ -19,7 +19,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff black
       - name: Run Ruff
-        run: ruff bridges
+        run: ruff check bridges
       - name: Run Black (check only)
         run: black --check bridges
 

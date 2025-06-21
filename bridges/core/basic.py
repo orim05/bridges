@@ -2,10 +2,9 @@
 bridges.core.basic
 Minimal implementation of the core bridge and function registration.
 """
-
+import inspect
 from typing import Any, Callable, Dict, Optional
-from .base import IBridge
-
+from .types import InputParamSource
 
 class FunctionMetadata:
     """
@@ -27,14 +26,22 @@ class FunctionMetadata:
         :param params: Parameter sources.
         :param output: Output destination.
         """
+        
         self.func = func
         self.name = name or func.__name__
         self.description = description or func.__doc__ or f"Execute {self.name}"
-        self.params = params or {}
+        if params is not None:
+            self.params = params
+        else:
+            self.params = {}
+            sig = inspect.signature(func)
+            for pname, param in sig.parameters.items():
+                default = param.default if param.default != inspect.Parameter.empty else None
+                self.params[pname] = InputParamSource(default=default)
         self.output = output
 
 
-class Bridge(IBridge):
+class Bridge:
     """
     Minimal core bridge class for registering functions and holding context.
     """

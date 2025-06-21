@@ -5,7 +5,6 @@ Abstract base classes and minimal core types for bridges framework.
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict
-from .basic import Bridge
 
 
 class ParamSource(ABC):
@@ -36,10 +35,10 @@ class BridgeInterface(ABC):
     """
     Abstract interface for bridge UIs (CLI, Web, etc).
 
-    :param bridge: An instance of IBridge to be used by the interface.
+    :param bridge: An instance of a bridge to be used by the interface.
     """
 
-    def __init__(self, bridge: Bridge):
+    def __init__(self, bridge):
         self.bridge = bridge
 
     @abstractmethod

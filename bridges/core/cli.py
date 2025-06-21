@@ -104,7 +104,6 @@ class MinimalCLI(BridgeInterface):
         :param meta: FunctionMetadata object for the function.
         :return: Dictionary of parameter values.
         """
-        import inspect
         params = {}
         sig = inspect.signature(meta.func)
         for pname, psource in meta.params.items():
@@ -124,13 +123,13 @@ class MinimalCLI(BridgeInterface):
         """
         # Only InputParamSource supported in minimal version
         prompt = f"{pname}"
-        if hasattr(psource, 'placeholder') and psource.placeholder:
+        if hasattr(psource, "placeholder") and psource.placeholder:
             prompt += f" ({psource.placeholder})"
-        if hasattr(psource, 'default') and psource.default is not None:
+        if hasattr(psource, "default") and psource.default is not None:
             prompt += f" [{psource.default}]"
         prompt += ": "
         val = input(prompt)
-        if not val and hasattr(psource, 'default'):
+        if not val and hasattr(psource, "default"):
             val = psource.default
         # Convert to correct type if possible
         if ptype is int:
@@ -155,8 +154,8 @@ class MinimalCLI(BridgeInterface):
         :param meta: FunctionMetadata object for the function.
         """
         # Only DisplayOutputDestination supported in minimal version
-        output = getattr(meta, 'output', None)
-        if hasattr(output, 'format'):
+        output = getattr(meta, "output", None)
+        if hasattr(output, "format"):
             print(f"\n{output.format.format(value=result)}\n")
         else:
             print(f"\nResult: {result}\n")

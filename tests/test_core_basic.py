@@ -24,6 +24,7 @@ def test_bridge_register_and_call():
     result = bridge.functions["add"].func(2, 3)
     assert result == 5
 
+
 def test_auto_param_extraction():
     def greet(name: str, excited: bool = False) -> str:
         if excited:

@@ -104,7 +104,6 @@ class MinimalCLI(BridgeInterface):
         :param meta: FunctionMetadata object for the function.
         :return: Dictionary of parameter values.
         """
-        import inspect
         params = {}
         sig = inspect.signature(meta.func)
         for pname, psource in meta.params.items():

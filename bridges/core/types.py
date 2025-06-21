@@ -2,8 +2,10 @@
 bridges.core.types
 Minimal concrete parameter and output types for bridges core.
 """
+
 from .base import ParamSource, OutputDestination
 from typing import Any, List
+
 
 class InputParamSource(ParamSource):
     """
@@ -12,9 +14,11 @@ class InputParamSource(ParamSource):
     :param default: Default value for the parameter.
     :param placeholder: Placeholder text for prompts.
     """
+
     def __init__(self, default: Any = None, placeholder: str = None):
         self.default = default
         self.placeholder = placeholder
+
 
 class MenuParamSource(ParamSource):
     """
@@ -23,9 +27,11 @@ class MenuParamSource(ParamSource):
     :param options: List of selectable options.
     :param default: Default selected value.
     """
+
     def __init__(self, options: List[Any], default: Any = None):
         self.options = options
         self.default = default
+
 
 class ContextParamSource(ParamSource):
     """
@@ -33,8 +39,10 @@ class ContextParamSource(ParamSource):
 
     :param key: Context key to retrieve value from.
     """
+
     def __init__(self, key: str):
         self.key = key
+
 
 class DisplayOutputDestination(OutputDestination):
     """
@@ -42,8 +50,10 @@ class DisplayOutputDestination(OutputDestination):
 
     :param format: Format string for displaying the value.
     """
+
     def __init__(self, format: str = "{value}"):
         self.format = format
+
 
 class ContextOutputDestination(OutputDestination):
     """
@@ -51,5 +61,6 @@ class ContextOutputDestination(OutputDestination):
 
     :param key: Context key to save the result under.
     """
+
     def __init__(self, key: str):
         self.key = key

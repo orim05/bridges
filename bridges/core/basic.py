@@ -2,14 +2,24 @@
 bridges.core.basic
 Minimal implementation of the core bridge and function registration.
 """
+
 from typing import Any, Callable, Dict, Optional
 from .base import IBridge
+
 
 class FunctionMetadata:
     """
     Metadata for a registered function.
     """
-    def __init__(self, func: Callable, name: Optional[str] = None, description: Optional[str] = None, params: Optional[Dict[str, Any]] = None, output: Any = None):
+
+    def __init__(
+        self,
+        func: Callable,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        params: Optional[Dict[str, Any]] = None,
+        output: Any = None,
+    ):
         """
         :param func: The function object.
         :param name: Optional name for the function.
@@ -23,10 +33,12 @@ class FunctionMetadata:
         self.params = params or {}
         self.output = output
 
+
 class Bridge(IBridge):
     """
     Minimal core bridge class for registering functions and holding context.
     """
+
     def __init__(self, name: str, version: str = "1.0.0"):
         """
         :param name: Name of the bridge.
@@ -37,7 +49,14 @@ class Bridge(IBridge):
         self.functions: Dict[str, FunctionMetadata] = {}
         self.context: Dict[str, Any] = {}
 
-    def register(self, func: Callable, name: Optional[str] = None, description: Optional[str] = None, params: Optional[Dict[str, Any]] = None, output: Any = None) -> FunctionMetadata:
+    def register(
+        self,
+        func: Callable,
+        name: Optional[str] = None,
+        description: Optional[str] = None,
+        params: Optional[Dict[str, Any]] = None,
+        output: Any = None,
+    ) -> FunctionMetadata:
         """
         Register a function with the bridge.
 

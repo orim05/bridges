@@ -2,14 +2,17 @@
 bridges.core.cli
 Minimal CLI interface for bridges core.
 """
+
 from typing import Any, Dict
 from .base import BridgeInterface, IBridge
 import inspect
+
 
 class MinimalCLI(BridgeInterface):
     """
     Minimal CLI interface for a bridge.
     """
+
     def customize(self, config: Dict[str, Any]):
         # No-op for minimal version
         pass

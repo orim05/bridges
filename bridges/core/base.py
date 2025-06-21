@@ -1,6 +1,5 @@
 """
 bridges.core.base
------------------
 Abstract base classes and minimal core types for bridges framework.
 """
 from abc import ABC, abstractmethod
@@ -20,10 +19,9 @@ class OutputDestination(ABC):
 
 class IBridge(ABC):
     """
-    Abstract base class for a Bridge.
+    Abstract base class for a Bridge (for type hinting and interface).
     """
     pass
-
 
 class BridgeInterface(ABC):
     """

@@ -4,7 +4,7 @@ Minimal CLI interface for bridges core.
 """
 
 from typing import Any, Dict
-from .base import BridgeInterface, IBridge
+from .base import BridgeInterface
 import inspect
 
 

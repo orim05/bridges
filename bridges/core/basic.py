@@ -40,7 +40,6 @@ class FunctionMetadata:
                 self.params[pname] = InputParamSource(default=default)
         self.output = output
 
-
 class Bridge:
     """
     Minimal core bridge class for registering functions and holding context.

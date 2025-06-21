@@ -1,6 +1,5 @@
 """
 bridges.core.types
-------------------
 Minimal concrete parameter and output types for bridges core.
 """
 from .base import ParamSource, OutputDestination

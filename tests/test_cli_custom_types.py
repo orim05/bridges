@@ -2,17 +2,23 @@ from bridges.core.basic import Bridge
 from bridges.core.types import ParamSource, OutputDestination
 from bridges.interfaces.cli import CLI
 
+
 class MyParam(ParamSource):
     def get_value(self, context):
         return 99
+
 
 class MyOutput(OutputDestination):
     def send(self, value, context):
         context["sent"] = value
 
+
 def test_cli_with_custom_param_output():
     bridge = Bridge("TestCustomCLI")
-    def f(a: int): return a * 2
+
+    def f(a: int):
+        return a * 2
+
     bridge.register(f, params={"a": MyParam()}, output=MyOutput())
     cli = CLI(bridge)
     # Simulate call
@@ -21,4 +27,4 @@ def test_cli_with_custom_param_output():
     assert result == 6
     context = {}
     meta.output[0].send(result, context)
-    assert context["sent"] == 6 
+    assert context["sent"] == 6

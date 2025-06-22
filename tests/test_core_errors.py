@@ -2,6 +2,7 @@
 tests.test_core_errors
 Test error handling in bridges core.
 """
+
 import pytest
 
 from bridges.core.basic import Bridge
@@ -13,6 +14,7 @@ def test_validation_error():
         if a < 0:
             raise ValueError("Negative not allowed")
         return a
+
     bridge = Bridge("TestErrors")
     meta = bridge.register(
         add_positive,
@@ -24,4 +26,4 @@ def test_validation_error():
         meta.func()
     # Simulate execution error
     with pytest.raises(ValueError):
-        meta.func(-1) 
+        meta.func(-1)

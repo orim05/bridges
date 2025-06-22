@@ -62,7 +62,7 @@ class CLI(BridgeInterface):
                 f"{banner}\n{subtitle}" if subtitle else f"{banner}",
                 box=box.ROUNDED,
                 style="blue",
-                padding=(1, 2)
+                padding=(1, 2),
             )
             self.console.print(panel)
             self.console.print()
@@ -70,7 +70,7 @@ class CLI(BridgeInterface):
     def run(self):
         """Run the CLI interface."""
         self._print_banner()
-        
+
         if not self.bridge.functions:
             self.console.print("[yellow]No functions registered.[/yellow]")
             return
@@ -81,29 +81,29 @@ class CLI(BridgeInterface):
             try:
                 # Get command with rich prompt
                 command = Prompt.ask(self.config["prompt"]).strip()
-                
+
                 if not command:
                     continue
 
                 # Add to history
                 self.history.append(command)
-                
+
                 # Parse command
                 parts = command.split()
                 cmd = parts[0].lower()
                 args = parts[1:] if len(parts) > 1 else []
 
                 # Handle built-in commands
-                if cmd in ['help', 'h']:
+                if cmd in ["help", "h"]:
                     self.help_display.print_help()
-                elif cmd in ['list', 'ls', 'l']:
+                elif cmd in ["list", "ls", "l"]:
                     self.help_display.list_functions(self.bridge)
-                elif cmd in ['info', 'i']:
+                elif cmd in ["info", "i"]:
                     if args:
                         self.help_display.show_function_info(self.bridge, args[0])
                     else:
                         self.console.print("[red]Usage: info <function_name>[/red]")
-                elif cmd in ['quit', 'exit', 'q']:
+                elif cmd in ["quit", "exit", "q"]:
                     if Confirm.ask("Are you sure you want to exit?"):
                         self.console.print("[green]Goodbye! 👋[/green]")
                         break
@@ -111,7 +111,7 @@ class CLI(BridgeInterface):
                     # Execute function
                     func_meta = self.bridge.functions[cmd]
                     params = self.param_collector.collect_parameters(func_meta)
-                    
+
                     if params is None:  # User cancelled
                         continue
 
@@ -135,4 +135,4 @@ class CLI(BridgeInterface):
 
 
 # Alias for backward compatibility
-SimpleCLI = CLI 
+SimpleCLI = CLI

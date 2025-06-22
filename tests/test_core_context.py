@@ -1,5 +1,6 @@
 from bridges.core.basic import Bridge
 
+
 def test_context_history_and_restore():
     bridge = Bridge("TestContext")
     bridge.update_context("a", 1)
@@ -14,4 +15,4 @@ def test_context_history_and_restore():
     bridge.update_context("x", 42)
     idx = len(bridge.context_history) - 2
     bridge.restore_context(idx)
-    assert "x" not in bridge.context or bridge.context["x"] != 42 
+    assert "x" not in bridge.context or bridge.context["x"] != 42

@@ -6,4 +6,4 @@ CLI interface package for bridges framework.
 
 from .core import CLI
 
-__all__ = ["CLI"] 
+__all__ = ["CLI"]

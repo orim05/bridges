@@ -17,7 +17,7 @@ def test_bridge_register_and_call():
         params={"a": InputParamSource(), "b": InputParamSource()},
         output=DisplayOutputDestination(),
     )
-    assert hasattr(meta, 'func')  # Check if it's FunctionMetadata
+    assert hasattr(meta, "func")  # Check if it's FunctionMetadata
     assert "add" in bridge.functions
     # Simulate call
     result = bridge.functions["add"].func(2, 3)

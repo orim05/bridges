@@ -9,4 +9,4 @@ from .cli import CLI
 # Backward compatibility alias
 SimpleCLI = CLI
 
-__all__ = ['CLI', 'SimpleCLI']
+__all__ = ["CLI", "SimpleCLI"]

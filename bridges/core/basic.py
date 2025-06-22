@@ -46,7 +46,7 @@ class FunctionMetadata:
         if params is not None:
             self.params = {}
             for pname, pval in params.items():
-                if hasattr(pval, 'validator'):  # Check if it's ParameterMetadata
+                if hasattr(pval, "validator"):  # Check if it's ParameterMetadata
                     self.params[pname] = pval
                 else:
                     self.params[pname] = pval
@@ -71,7 +71,9 @@ class FunctionMetadata:
         # Output destinations
         if output is None:
             self.output = []
-        elif hasattr(output, '__iter__') and not hasattr(output, 'strip'):  # Check if it's a list-like object
+        elif hasattr(output, "__iter__") and not hasattr(
+            output, "strip"
+        ):  # Check if it's a list-like object
             self.output = output
         else:
             self.output = [output]
@@ -98,14 +100,16 @@ class FunctionMetadata:
         :raises BridgeExecutionError: If function execution fails.
         """
         bridge = getattr(self, "bridge", None)
-        if getattr(self, "debug", False) or (bridge and getattr(bridge, "debug", False)):
+        if getattr(self, "debug", False) or (
+            bridge and getattr(bridge, "debug", False)
+        ):
             print(f"[DEBUG] Calling {self.name} with params: {params}")
         if bridge and hasattr(bridge, "_pre_hooks"):
             for hook in bridge._pre_hooks:
                 hook(params, self)
         # Custom per-parameter validation
         for pname, meta in getattr(self, "params", {}).items():
-            if hasattr(meta, 'validator') and meta.validator:
+            if hasattr(meta, "validator") and meta.validator:
                 value = params.get(pname, meta.default)
                 try:
                     if not meta.validator(value):
@@ -123,7 +127,9 @@ class FunctionMetadata:
                 for hook in bridge._error_hooks:
                     hook(e, self)
             msg = f"Parameter validation failed for function '{self.name}': {e}"
-            if getattr(self, "debug", False) or (bridge and getattr(bridge, "debug", False)):
+            if getattr(self, "debug", False) or (
+                bridge and getattr(bridge, "debug", False)
+            ):
                 print(f"[DEBUG] {msg}")
             raise BridgeValidationError(msg) from e
         try:
@@ -133,7 +139,9 @@ class FunctionMetadata:
                 for hook in bridge._error_hooks:
                     hook(e, self)
             msg = f"Execution failed for function '{self.name}': {e}"
-            if getattr(self, "debug", False) or (bridge and getattr(bridge, "debug", False)):
+            if getattr(self, "debug", False) or (
+                bridge and getattr(bridge, "debug", False)
+            ):
                 print(f"[DEBUG] {msg}")
             raise BridgeExecutionError(msg) from e
         if bridge and hasattr(bridge, "_post_hooks"):
@@ -229,4 +237,4 @@ class Bridge:
         Get the list of context history snapshots.
         :return: List of context dicts.
         """
-        return self.context_history 
+        return self.context_history

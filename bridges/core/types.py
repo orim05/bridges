@@ -160,11 +160,16 @@ class ContextParamSource(ParamSource):
     Parameter source from context.
     """
 
-    def __init__(self, key: str):
+    def __init__(self, key: str, default: Any = None):
         """
         :param key: Context key to retrieve value from.
+        :param default: Default value if key is missing from context.
         """
         self.key: str = key
+        self.default: Any = default
+
+    def get_value(self, context: dict) -> Any:
+        return context.get(self.key, self.default)
 
     @classmethod
     def supports(
@@ -211,6 +216,13 @@ class ContextOutputDestination(OutputDestination):
         :param key: Context key to save the result under.
         """
         self.key: str = key
+
+    def send(self, value, bridge):
+        """
+        Save the value to the bridge context under the specified key.
+        """
+        if hasattr(bridge, "update_context"):
+            bridge.update_context(self.key, value)
 
 
 class ListParamSource(ParamSource):

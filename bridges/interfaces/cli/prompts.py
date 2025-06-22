@@ -23,7 +23,19 @@ class ParameterCollector:
         self.console.print(f"\n[bold green]Executing: {func_meta.name}[/bold green]")
         self.console.print("[dim]Press Ctrl+C to cancel[/dim]\n")
 
+        # Get bridge context if available
+        bridge = getattr(func_meta, "bridge", None)
+        context = getattr(bridge, "context", {}) if bridge else {}
+
         for param_name, param_meta in func_meta.params.items():
+            # Auto-fill from context for ContextParamSource
+            if type(param_meta).__name__ == "ContextParamSource":
+                value = param_meta.get_value(context)
+                params[param_name] = value
+                self.console.print(
+                    f"[cyan]{param_name}[/cyan] (from context: '{param_meta.key}') [green]Auto-filled: {value}[/green]"
+                )
+                continue
             try:
                 # Parameter header
                 param_header = f"[bold cyan]{param_name}[/bold cyan]"
@@ -109,17 +121,36 @@ class ParameterCollector:
             self.console.print(f"[green]Using default: {param_meta.default}[/green]")
 
     def _collect_file_param(self, param_name: str, param_meta, params: Dict[str, Any]):
-        """Collect file parameter input."""
-        file_path = Prompt.ask("Enter file path")
-        if file_path:
-            try:
-                with open(file_path, param_meta.mode) as f:
-                    params[param_name] = f.read()
-                self.console.print(f"[green]File loaded: {file_path}[/green]")
-            except FileNotFoundError:
-                self.console.print(f"[red]File not found: {file_path}[/red]")
-            except Exception as e:
-                self.console.print(f"[red]Error reading file: {e}[/red]")
+        """Collect file parameter input, handling both read and write modes."""
+        mode = getattr(param_meta, "mode", "r")
+        while True:
+            file_path = Prompt.ask("Enter file path (or type 'cancel' to skip)")
+            if not file_path or file_path.lower() == "cancel":
+                self.console.print(
+                    f"[yellow]Cancelled input for {param_name}.[/yellow]"
+                )
+                return
+            if "r" in mode:
+                try:
+                    with open(file_path, mode) as f:
+                        params[param_name] = f.read()
+                    self.console.print(f"[green]File loaded: {file_path}[/green]")
+                    break
+                except FileNotFoundError:
+                    self.console.print(f"[red]File not found: {file_path}[/red]")
+                except Exception as e:
+                    self.console.print(f"[red]Error reading file: {e}[/red]")
+            elif any(m in mode for m in ["w", "a", "+"]):
+                params[param_name] = file_path
+                self.console.print(
+                    f"[green]File path set for writing: {file_path}[/green]"
+                )
+                break
+            else:
+                self.console.print(
+                    f"[red]Unsupported file mode: {mode} for {param_name}[/red]"
+                )
+                break
 
     def _collect_input_param(self, param_name: str, param_meta, params: Dict[str, Any]):
         """Collect basic input parameter."""

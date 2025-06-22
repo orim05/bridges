@@ -14,7 +14,10 @@ def test_custom_param_output():
 
     class MyOutput(OutputDestination):
         def send(self, value, context):
-            context["sent"] = value
+            if hasattr(context, "update_context"):
+                context.update_context("sent", value)
+            else:
+                context["sent"] = value
 
     bridge = Bridge("TestCustom")
 

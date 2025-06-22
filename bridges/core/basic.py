@@ -144,6 +144,11 @@ class FunctionMetadata:
             ):
                 print(f"[DEBUG] {msg}")
             raise BridgeExecutionError(msg) from e
+        # Handle output destinations (e.g., save to context)
+        if bridge and hasattr(self, "output"):
+            for dest in self.output:
+                if hasattr(dest, "send") and callable(getattr(dest, "send")):
+                    dest.send(result, bridge)
         if bridge and hasattr(bridge, "_post_hooks"):
             for hook in bridge._post_hooks:
                 hook(result, self)

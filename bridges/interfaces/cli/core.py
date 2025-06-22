@@ -141,7 +141,9 @@ class CLI(BridgeInterface):
         if bname in self.bridges:
             self.active_bridge_name = bname
             self.bridge = self.bridges[bname]
-            self._func_name_map = {fname.lower(): fname for fname in self.bridge.functions}
+            self._func_name_map = {
+                fname.lower(): fname for fname in self.bridge.functions
+            }
             self.config["prompt"] = self._make_prompt()
             self.console.print(f"[green]Switched to bridge: {bname}[/green]")
         else:
@@ -164,7 +166,9 @@ class CLI(BridgeInterface):
         elif cmd in ["instances", "list-instances"]:
             instances = self.bridge.list_all_instances()
             if not instances:
-                self.console.print("[yellow]No class instances found in context.[/yellow]")
+                self.console.print(
+                    "[yellow]No class instances found in context.[/yellow]"
+                )
             else:
                 self.console.print("[bold blue]Instances by class:[/bold blue]")
                 for cls, names in instances.items():

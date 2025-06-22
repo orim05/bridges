@@ -7,7 +7,6 @@ Core bridge functionality for registering functions, managing context, and event
 import copy
 import inspect
 from typing import Any, Callable, Dict, List, Optional
-from datetime import datetime
 from pydantic import BaseModel, ValidationError, create_model
 from .errors import BridgeExecutionError, BridgeValidationError
 from .types import ParamSource
@@ -126,7 +125,9 @@ class FunctionMetadata:
         :param params: Parameters passed to the function.
         :param bridge: The bridge instance (may be None).
         """
-        if getattr(self, "debug", False) or (bridge and getattr(bridge, "debug", False)):
+        if getattr(self, "debug", False) or (
+            bridge and getattr(bridge, "debug", False)
+        ):
             print(f"[DEBUG] Calling {self.name} with params: {params}")
 
     def _run_pre_hooks(self, params, bridge):
@@ -183,7 +184,9 @@ class FunctionMetadata:
                 for hook in bridge._error_hooks:
                     hook(e, self)
             msg = f"Parameter validation failed for function '{self.name}': {e}"
-            if getattr(self, "debug", False) or (bridge and getattr(bridge, "debug", False)):
+            if getattr(self, "debug", False) or (
+                bridge and getattr(bridge, "debug", False)
+            ):
                 print(f"[DEBUG] {msg}")
             raise BridgeValidationError(msg) from e
 
@@ -202,7 +205,9 @@ class FunctionMetadata:
                 for hook in bridge._error_hooks:
                     hook(e, self)
             msg = f"Execution failed for function '{self.name}': {e}"
-            if getattr(self, "debug", False) or (bridge and getattr(bridge, "debug", False)):
+            if getattr(self, "debug", False) or (
+                bridge and getattr(bridge, "debug", False)
+            ):
                 print(f"[DEBUG] {msg}")
             raise BridgeExecutionError(msg) from e
 
@@ -346,7 +351,7 @@ class Bridge:
 
     def _register_stateless_class_methods(self, cls, methods):
         """Register static/class methods as independent bridge functions."""
-        for method in (methods or []):
+        for method in methods or []:
             method_name = method["name"]
             func = getattr(cls, method_name)
             self.register(
@@ -360,17 +365,26 @@ class Bridge:
     def _register_stateful_constructor(self, cls, params, output, key):
         """Register a constructor function that creates and stores the instance in context, supporting multiple named instances."""
         import inspect
+
         def make_and_store_instance(*args, instance_name: str = None, **kwargs):
             instance = cls(*args, **kwargs)
             store_key = f"{key}:{instance_name}" if instance_name else key
             self.update_context(store_key, instance)
             return instance
+
         # Use the signature from __init__, excluding 'self'
         sig = inspect.signature(cls.__init__)
         params_list = list(sig.parameters.values())
-        if params_list and params_list[0].name == 'self':
+        if params_list and params_list[0].name == "self":
             params_list = params_list[1:]
-        params_list.append(inspect.Parameter('instance_name', inspect.Parameter.KEYWORD_ONLY, default=None, annotation=str))
+        params_list.append(
+            inspect.Parameter(
+                "instance_name",
+                inspect.Parameter.KEYWORD_ONLY,
+                default=None,
+                annotation=str,
+            )
+        )
         make_and_store_instance.__signature__ = inspect.Signature(params_list)
         self.register(
             make_and_store_instance,
@@ -383,26 +397,40 @@ class Bridge:
     def _register_stateful_methods(self, cls, methods, key):
         """Register instance methods that operate on the stored instance in context, supporting multiple named instances."""
         import inspect
-        for method in (methods or []):
+
+        for method in methods or []:
             method_name = method["name"]
+
             def make_method_func(mname):
                 method_obj = getattr(cls, mname)
                 sig = inspect.signature(method_obj)
                 # Remove 'self' from the signature
                 params = list(sig.parameters.values())
-                if params and params[0].name == 'self':
+                if params and params[0].name == "self":
                     params = params[1:]
                 # Add instance_name as a keyword-only parameter
-                params.append(inspect.Parameter('instance_name', inspect.Parameter.KEYWORD_ONLY, default=None, annotation=str))
+                params.append(
+                    inspect.Parameter(
+                        "instance_name",
+                        inspect.Parameter.KEYWORD_ONLY,
+                        default=None,
+                        annotation=str,
+                    )
+                )
                 new_sig = inspect.Signature(params)
+
                 def method_func(*args, instance_name: str = None, **kwargs):
                     store_key = f"{key}:{instance_name}" if instance_name else key
                     instance = self.context.get(store_key)
                     if not instance:
-                        raise RuntimeError(f"No {cls.__name__} instance found in context for key '{store_key}'. Please create one first.")
+                        raise RuntimeError(
+                            f"No {cls.__name__} instance found in context for key '{store_key}'. Please create one first."
+                        )
                     return getattr(instance, mname)(*args, **kwargs)
+
                 method_func.__signature__ = new_sig
                 return method_func
+
             self.register(
                 make_method_func(method_name),
                 name=f"{cls.__name__}.{method_name}",
@@ -417,6 +445,7 @@ class Bridge:
         Example: { 'Counter': ['default', 'mycounter', ...], ... }
         """
         from collections import defaultdict
+
         result = defaultdict(list)
         for key in self.context:
             if "_instance" in key:

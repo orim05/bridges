@@ -48,9 +48,11 @@ def test_stateful_class_multiple_instances():
     class Counter:
         def __init__(self, start: int = 0):
             self.value = start
+
         def increment(self, amount: int = 1):
             self.value += amount
             return self.value
+
         def reset(self):
             self.value = 0
             return self.value
@@ -61,7 +63,7 @@ def test_stateful_class_multiple_instances():
         Counter,
         params={
             "start": InputParamSource(default=0),
-            "instance_name": InputParamSource(default=None)
+            "instance_name": InputParamSource(default=None),
         },
         output=display,
         methods=[
@@ -69,25 +71,27 @@ def test_stateful_class_multiple_instances():
                 "name": "increment",
                 "params": {
                     "amount": InputParamSource(default=1),
-                    "instance_name": InputParamSource(default=None)
+                    "instance_name": InputParamSource(default=None),
                 },
-                "output": display
+                "output": display,
             },
             {
                 "name": "reset",
-                "params": {
-                    "instance_name": InputParamSource(default=None)
-                },
-                "output": display
-            }
-        ]
+                "params": {"instance_name": InputParamSource(default=None)},
+                "output": display,
+            },
+        ],
     )
     # Create two named instances
     bridge.functions["create_counter_instance"]({"start": 10, "instance_name": "foo"})
     bridge.functions["create_counter_instance"]({"start": 100, "instance_name": "bar"})
     # Increment each
-    res_foo = bridge.functions["Counter.increment"]({"amount": 5, "instance_name": "foo"})
-    res_bar = bridge.functions["Counter.increment"]({"amount": 7, "instance_name": "bar"})
+    res_foo = bridge.functions["Counter.increment"](
+        {"amount": 5, "instance_name": "foo"}
+    )
+    res_bar = bridge.functions["Counter.increment"](
+        {"amount": 7, "instance_name": "bar"}
+    )
     assert res_foo == 15
     assert res_bar == 107
     # Reset foo

@@ -48,7 +48,7 @@ class BridgeInterface(ABC):
 
         :param config: Dictionary of configuration options.
         """
-        if hasattr(self, 'config') and isinstance(self.config, dict):
+        if hasattr(self, "config") and isinstance(self.config, dict):
             self.config.update(config)
 
     @abstractmethod

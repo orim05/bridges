@@ -2,7 +2,7 @@
 
 **A modern, framework-agnostic Python middleware for modular function registration, typed parameter and output handling, and automatic interface generation.**
 
-**Version: 0.2.0**
+**Version: 0.3.0**
 
 ---
 

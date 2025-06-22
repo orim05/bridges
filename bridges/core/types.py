@@ -108,18 +108,21 @@ class MenuParamSource(ParamSource):
         :param description: Description for the parameter.
         :param validator: Callable for custom validation (value -> bool or raises).
         """
-        # Normalize options to (label, value) tuples
-        normalized: list = []
+        self.options: list = self._normalize_options(options)
+        self.default: Any = default
+        self.description: Optional[str] = description
+        self.validator: Optional[Any] = validator
+
+    def _normalize_options(self, options):
+        """Normalize options to (label, value) tuples."""
+        normalized = []
         for option in options:
             if hasattr(option, "__len__") and len(option) == 2:
                 label, value = option
             else:
                 label, value = str(option), option
             normalized.append((label, value))
-        self.options: list = normalized
-        self.default: Any = default
-        self.description: Optional[str] = description
-        self.validator: Optional[Any] = validator
+        return normalized
 
     @classmethod
     def supports(

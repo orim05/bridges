@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="bridges",
-    version="0.2.0",
+    version="0.3.0",
     description="A framework-agnostic middleware for automatic UI generation.",
     author="orim05",
     author_email="orimeiri18@email.com",

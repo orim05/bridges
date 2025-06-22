@@ -1,5 +1,7 @@
 # bridges
 
+[![PyPI version](https://img.shields.io/pypi/v/bridges.svg)](https://pypi.org/project/bridges/)
+
 **A modern, framework-agnostic Python middleware for modular function registration, typed parameter and output handling, and automatic interface generation.**
 
 **Version: 0.2.0**
@@ -22,6 +24,8 @@
 - **Event hooks** for pre/post/error handling
 - **Context management** with history and snapshots
 - **Framework-agnostic**: build your own UI, API, or CLI
+- **Multi-bridge support**: run and switch between multiple bridges in one CLI
+- **Object handling**: stateful class registration, multiple named instances, context isolation
 
 ---
 
@@ -227,4 +231,18 @@ MIT
 ## 📜 Changelog
 
 See `CHANGELOG.md` for highlights.
+
+## Multi-Bridge CLI Usage
+- Use `switch <bridge>` to change the active bridge.
+- Use `bridges` to list all available bridges.
+- Each bridge has its own context, functions, and state.
+
+## CLI Commands
+- `help` - Show help
+- `list` - List functions
+- `info <function>` - Show function info
+- `instances` - List all class instances
+- `bridges` - List all bridges (multi-bridge mode)
+- `switch <bridge>` - Switch active bridge
+- `quit` - Exit
 

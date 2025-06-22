@@ -67,6 +67,8 @@ class HelpDisplay:
   [cyan]help[/cyan]                    - Show this help message
   [cyan]list[/cyan]                   - List all available functions
   [cyan]info <function>[/cyan]        - Show detailed function information
+  [cyan]instances[/cyan]              - List all class instances by class name
+  [cyan]bridges[/cyan]                - List all available bridges (multi-bridge mode)
   [cyan]quit[/cyan], [cyan]exit[/cyan], [cyan]q[/cyan]  - Exit the CLI
 
 [bold]Function Execution:[/bold]
@@ -75,6 +77,8 @@ class HelpDisplay:
 [bold]Examples:[/bold]
   [green]<function_name>[/green]      - Execute a function
   [green]info <function_name>[/green] - Show details about a function
+  [green]instances[/green]            - List all class instances
+  [green]bridges[/green]              - List all bridges
         """
 
         panel = Panel(help_text, title="[bold blue]Help[/bold blue]", box=box.ROUNDED)

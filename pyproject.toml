@@ -4,8 +4,3 @@ build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 ignore = ["F811"]
-
-[project]
-dependencies = [
-    "pydantic>=1.10.0,<3.0.0",
-]
